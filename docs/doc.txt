@@ -1,0 +1,23 @@
+Backend setup
+
+1- installation and folder setup
+  . create foler for backend 
+  . create virtaual env ( code - python -m venv venv )
+  . activate venv (code - venv\Scripts\activate)
+  . instal all dependency like install django , project at all in venv
+  . make file for all app ( file - apps)
+  . create all folder like ( accounts , doctor , branches , hospital etc)
+  . create a __init__.py file inside app folder
+  . install all Third-party packages 
+     a- pip install djangorestframework , pip install djangorestframework-simplejwt , pip install django-cors-headers , pip install psycopg[binary] (for PostgreSQL driver) , pip install python-dotenv (for .env file) , pip install django-filter , pip install drf-spectacular (API documentation) , pip install Pillow (for images)
+ . Add apps inside app folder - python manage.py startapp receptionist apps/receptionist
+ 
+
+
+
+
+
+  https://chatgpt.com/c/6a7d0bda-328c-83e9-bc03-e2c508ee52d7
+
+  https://chatgpt.com/c/6a7d0bda-328c-83e9-bc03-e2c508ee52d7
+  https://chatgpt.com/c/6a7de575-40dc-83e8-8840-3784a229ae1d
