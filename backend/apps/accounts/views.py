@@ -1,6 +1,13 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
-# Create your views here.
-def test(request):
-    return HttpResponse("Hello, World!")
+from .serializers import UserRegistrationSerializer
+
+
+class UserRegistrationView(generics.CreateAPIView):
+    """
+    Register a new application user.
+    """
+
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [AllowAny]

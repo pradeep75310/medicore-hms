@@ -16,8 +16,28 @@ Including another URLconf
 """
 # from django.contrib.flatpages import views
 from django.urls import path
-from .views import test
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+from .views import UserRegistrationView
+
 
 urlpatterns = [
-    path('home/', test, name='test'),
+    path(
+        "register/",
+        UserRegistrationView.as_view(),
+        name="register",
+    ),
+    path(
+        "login/",
+        TokenObtainPairView.as_view(),
+        name="login",
+    ),
+    path(
+        "token/refresh/",
+        TokenRefreshView.as_view(),
+        name="token-refresh",
+    ),
 ]
