@@ -1,3 +1,20 @@
 from django.contrib import admin
+from .models import Doctor
 
-# Register your models here.
+
+@admin.register(Doctor)
+class DoctorAdmin(admin.ModelAdmin):
+    list_display = (
+        'full_name',
+        'specialization',
+        'department',
+        'hospital',
+        'phone',
+        'email',
+        'is_available',
+        'is_active',
+        'created_at'
+    )
+    list_filter = ('specialization', 'department', 'hospital', 'is_available', 'is_active')
+    search_fields = ('first_name', 'last_name', 'specialization', 'department', 'license_number', 'email', 'phone')
+    ordering = ('-created_at',)

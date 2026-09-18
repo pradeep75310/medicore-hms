@@ -1,3 +1,20 @@
 from django.contrib import admin
+from .models import Nurse
 
-# Register your models here.
+
+@admin.register(Nurse)
+class NurseAdmin(admin.ModelAdmin):
+    list_display = (
+        'full_name',
+        'department',
+        'shift',
+        'assigned_ward',
+        'hospital',
+        'phone',
+        'email',
+        'is_active',
+        'created_at'
+    )
+    list_filter = ('shift', 'department', 'hospital', 'is_active')
+    search_fields = ('first_name', 'last_name', 'department', 'assigned_ward', 'license_number', 'email', 'phone')
+    ordering = ('-created_at',)

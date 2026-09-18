@@ -1,6 +1,10 @@
-from django.urls import path
-from .views import NurseListCreateView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import NurseViewSet
+
+router = DefaultRouter()
+router.register(r'', NurseViewSet, basename='nurse')
 
 urlpatterns = [
-    path('', NurseListCreateView.as_view(), name='nurse-list-create'),
+    path('', include(router.urls)),
 ]
