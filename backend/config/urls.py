@@ -23,7 +23,7 @@ urlpatterns = [
     # path('api/patients/', include('apps.patients.urls')),
     # path('api/appointments/', include('apps.appointments.urls')),
     # path('api/doctors/', include('apps.doctors.urls')),
-    # path('api/hospitals/', include('apps.hospitals.urls')),
+    path('api/hospitals/', include('apps.hospitals.urls')),
     # path('api/laboratory/', include('apps.laboratory.urls')),
     # path('api/receptionist/', include('apps.receptionist.urls')),
     # path('api/pharmacy/', include('apps.pharmacy.urls')),
