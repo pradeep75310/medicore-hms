@@ -10,7 +10,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
     """
     CRUD ViewSet for Doctors with filtering, search, and custom actions.
     """
-    queryset = Doctor.objects.select_related('hospital').all()
+    queryset = Doctor.objects.select_related('branch', 'department', 'user').all()
     serializer_class = DoctorSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -18,29 +18,32 @@ class DoctorViewSet(viewsets.ModelViewSet):
         'first_name',
         'last_name',
         'specialization',
-        'department',
         'license_number',
         'email',
         'phone',
-        'hospital__name'
+        'branch__name',
+        'department__name'
     ]
     ordering_fields = ['first_name', 'specialization', 'experience_years', 'consultation_fee', 'created_at']
     ordering = ['-created_at']
 
     def get_queryset(self):
-        queryset = Doctor.objects.select_related('hospital').all()
-        hospital_id = self.request.query_params.get('hospital')
+        queryset = Doctor.objects.select_related('branch', 'department', 'user').all()
+        branch_id = self.request.query_params.get('branch')
         specialization = self.request.query_params.get('specialization')
         department = self.request.query_params.get('department')
         is_available = self.request.query_params.get('is_available')
         is_active = self.request.query_params.get('is_active')
 
-        if hospital_id:
-            queryset = queryset.filter(hospital_id=hospital_id)
+        if branch_id:
+            queryset = queryset.filter(branch_id=branch_id)
         if specialization:
             queryset = queryset.filter(specialization__icontains=specialization)
         if department:
-            queryset = queryset.filter(department__icontains=department)
+            if department.isdigit():
+                queryset = queryset.filter(department_id=int(department))
+            else:
+                queryset = queryset.filter(department__name__icontains=department)
         if is_available is not None:
             queryset = queryset.filter(is_available=is_available.lower() == 'true')
         if is_active is not None:

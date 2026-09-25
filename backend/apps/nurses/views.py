@@ -10,7 +10,7 @@ class NurseViewSet(viewsets.ModelViewSet):
     """
     CRUD ViewSet for Nurses with filtering and search.
     """
-    queryset = Nurse.objects.select_related('hospital').all()
+    queryset = Nurse.objects.select_related('branch', 'user').all()
     serializer_class = NurseSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -22,20 +22,20 @@ class NurseViewSet(viewsets.ModelViewSet):
         'license_number',
         'email',
         'phone',
-        'hospital__name'
+        'branch__name'
     ]
     ordering_fields = ['first_name', 'department', 'shift', 'experience_years', 'created_at']
     ordering = ['-created_at']
 
     def get_queryset(self):
-        queryset = Nurse.objects.select_related('hospital').all()
-        hospital_id = self.request.query_params.get('hospital')
+        queryset = Nurse.objects.select_related('branch', 'user').all()
+        branch_id = self.request.query_params.get('branch')
         department = self.request.query_params.get('department')
         shift = self.request.query_params.get('shift')
         is_active = self.request.query_params.get('is_active')
 
-        if hospital_id:
-            queryset = queryset.filter(hospital_id=hospital_id)
+        if branch_id:
+            queryset = queryset.filter(branch_id=branch_id)
         if department:
             queryset = queryset.filter(department__icontains=department)
         if shift:

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from apps.hospitals.models import Hospital
+from django.conf import settings
 
 
 class Nurse(models.Model):
@@ -11,8 +11,15 @@ class Nurse(models.Model):
         ('Rotational', 'Rotational'),
     ]
 
-    hospital = models.ForeignKey(
-        Hospital,
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='nurse_profile',
+        null=True,
+        blank=True
+    )
+    branch = models.ForeignKey(
+        'branches.Branch',
         on_delete=models.CASCADE,
         related_name='nurses',
         null=True,

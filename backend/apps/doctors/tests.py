@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from apps.hospitals.models import Hospital
+from apps.branches.models import Branch
+from apps.departments.models import Department
 from .models import Doctor
 
 
@@ -10,18 +12,24 @@ class DoctorAPITests(TestCase):
         self.client = APIClient()
         self.hospital = Hospital.objects.create(
             name="Teaching Hospital",
+            hospital_code="HOSP001",
             phone="01-4412345",
             email="info@teachinghospital.edu.np",
-            address="Maharajgunj",
             city="Kathmandu"
         )
+        self.branch = Branch.objects.create(name="Main Branch")
+        self.department = Department.objects.create(
+            name="Cardiology",
+            address="Block A",
+            hospital=self.hospital
+        )
         self.doctor = Doctor.objects.create(
-            hospital=self.hospital,
+            branch=self.branch,
+            department=self.department,
             first_name="Sandesh",
             last_name="Sharma",
             specialization="Cardiology",
             qualification="MBBS, MD Cardiology",
-            department="Cardiology",
             phone="9841000000",
             email="sandesh.sharma@example.com",
             experience_years=8,
@@ -38,12 +46,12 @@ class DoctorAPITests(TestCase):
 
     def test_create_doctor(self):
         payload = {
-            "hospital": self.hospital.id,
+            "branch": self.branch.id,
+            "department": self.department.id,
             "first_name": "Ramesh",
             "last_name": "Adhikari",
             "specialization": "Neurology",
             "qualification": "MBBS, MS",
-            "department": "Neurology",
             "phone": "9841111111",
             "email": "ramesh.adhikari@example.com",
             "experience_years": 5,

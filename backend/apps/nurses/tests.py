@@ -1,22 +1,16 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from apps.hospitals.models import Hospital
+from apps.branches.models import Branch
 from .models import Nurse
 
 
 class NurseAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.hospital = Hospital.objects.create(
-            name="Teaching Hospital",
-            phone="01-4412345",
-            email="info@teachinghospital.edu.np",
-            address="Maharajgunj",
-            city="Kathmandu"
-        )
+        self.branch = Branch.objects.create(name="Main Branch")
         self.nurse = Nurse.objects.create(
-            hospital=self.hospital,
+            branch=self.branch,
             first_name="Sita",
             last_name="Shrestha",
             department="Emergency",
@@ -37,7 +31,7 @@ class NurseAPITests(TestCase):
 
     def test_create_nurse(self):
         payload = {
-            "hospital": self.hospital.id,
+            "branch": self.branch.id,
             "first_name": "Gita",
             "last_name": "Rai",
             "department": "ICU",

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from .models import Doctor
-from apps.hospitals.models import Hospital
 
 
 class DoctorSerializer(serializers.ModelSerializer):
     full_name = serializers.ReadOnlyField()
-    hospital_name = serializers.ReadOnlyField(source='hospital.name')
+    branch_name = serializers.ReadOnlyField(source='branch.name')
+    department_name = serializers.ReadOnlyField(source='department.name')
     # Support backward-compatibility write field 'name' if provided
     name = serializers.CharField(write_only=True, required=False)
 
@@ -13,8 +13,11 @@ class DoctorSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = [
             'id',
-            'hospital',
-            'hospital_name',
+            'user',
+            'branch',
+            'branch_name',
+            'department',
+            'department_name',
             'first_name',
             'last_name',
             'name',
@@ -22,7 +25,6 @@ class DoctorSerializer(serializers.ModelSerializer):
             'license_number',
             'specialization',
             'qualification',
-            'department',
             'phone',
             'email',
             'experience_years',
@@ -35,7 +37,7 @@ class DoctorSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'full_name', 'hospital_name']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'full_name', 'branch_name', 'department_name']
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},

@@ -8,13 +8,13 @@ class DoctorAdmin(admin.ModelAdmin):
         'full_name',
         'specialization',
         'department',
-        'hospital',
+        'branch',
         'phone',
         'email',
         'is_available',
         'is_active',
         'created_at'
     )
-    list_filter = ('specialization', 'department', 'hospital', 'is_available', 'is_active')
-    search_fields = ('first_name', 'last_name', 'specialization', 'department', 'license_number', 'email', 'phone')
+    list_filter = ('specialization', 'department', 'branch', 'is_available', 'is_active')
+    search_fields = ('first_name', 'last_name', 'specialization', 'license_number', 'email', 'phone')
     ordering = ('-created_at',)

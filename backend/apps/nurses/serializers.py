@@ -4,7 +4,7 @@ from .models import Nurse
 
 class NurseSerializer(serializers.ModelSerializer):
     full_name = serializers.ReadOnlyField()
-    hospital_name = serializers.ReadOnlyField(source='hospital.name')
+    branch_name = serializers.ReadOnlyField(source='branch.name')
     # Backward compatibility write field 'name'
     name = serializers.CharField(write_only=True, required=False)
 
@@ -12,8 +12,9 @@ class NurseSerializer(serializers.ModelSerializer):
         model = Nurse
         fields = [
             'id',
-            'hospital',
-            'hospital_name',
+            'user',
+            'branch',
+            'branch_name',
             'first_name',
             'last_name',
             'name',
@@ -30,7 +31,7 @@ class NurseSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'full_name', 'hospital_name']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'full_name', 'branch_name']
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},

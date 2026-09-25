@@ -1,14 +1,28 @@
 from django.db import models
 from django.utils import timezone
-from apps.hospitals.models import Hospital
+from django.conf import settings
 
 
 class Doctor(models.Model):
-    hospital = models.ForeignKey(
-        Hospital, 
-        on_delete=models.CASCADE, 
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='doctor_profile',
+        null=True,
+        blank=True
+    )
+    branch = models.ForeignKey(
+        'branches.Branch',
+        on_delete=models.CASCADE,
         related_name='doctors',
-        null=True, 
+        null=True,
+        blank=True
+    )
+    department = models.ForeignKey(
+        'departments.Department',
+        on_delete=models.CASCADE,
+        related_name='doctors',
+        null=True,
         blank=True
     )
     first_name = models.CharField(max_length=100)
@@ -16,7 +30,6 @@ class Doctor(models.Model):
     license_number = models.CharField(max_length=100, unique=True, null=True, blank=True)
     specialization = models.CharField(max_length=150)
     qualification = models.CharField(max_length=200, blank=True)
-    department = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=30)
     email = models.EmailField()
     experience_years = models.PositiveIntegerField(default=0)
