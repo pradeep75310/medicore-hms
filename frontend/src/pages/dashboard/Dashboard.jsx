@@ -11,15 +11,15 @@ const COLORS = ['#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
 export default function Dashboard() {
   const { role, user } = useSelector(state => state.auth);
 
-  if (role === 'doctor') return <DoctorDashboard user={user} />;
-  if (role === 'patient') return <PatientDashboard user={user} />;
-  if (role === 'receptionist') return <ReceptionistDashboard user={user} />;
-  if (role === 'nurse') return <NurseDashboard user={user} />;
-  if (role === 'lab_technician') return <LabTechnicianDashboard user={user} />;
-  if (role === 'pharmacist') return <PharmacistDashboard user={user} />;
-  if (role === 'accountant') return <AccountantDashboard user={user} />;
+  if (role === 'DOCTOR') return <DoctorDashboard user={user} />;
+  if (role === 'PATIENT') return <PatientDashboard user={user} />;
+  if (role === 'RECEPTIONIST') return <ReceptionistDashboard user={user} />;
+  if (role === 'NURSE') return <NurseDashboard user={user} />;
+  if (role === 'LAB_TECHNICIAN') return <LabTechnicianDashboard user={user} />;
+  if (role === 'PHARMACIST') return <PharmacistDashboard user={user} />;
+  if (role === 'ACCOUNTANT') return <AccountantDashboard user={user} />;
 
-  // super_admin, hospital_admin
+  // SUPER_ADMIN, HOSPITAL_ADMIN, BRANCH_ADMIN
   return <AdminDashboard user={user} />;
 }
 

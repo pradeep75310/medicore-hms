@@ -6,34 +6,37 @@ import {
   FiX, FiHome, FiUsers, FiCalendar, FiHeart,
   FiFileText, FiMonitor, FiDroplet, FiShoppingCart, FiDollarSign,
   FiLayers, FiAlertTriangle, FiBriefcase, FiPackage, FiCpu,
-  FiActivity, FiChevronRight
+  FiActivity, FiChevronRight, FiGrid, FiMapPin
 } from 'react-icons/fi';
 import { HiOutlineShieldCheck } from 'react-icons/hi2';
 
-const FULL_ACCESS_ROLES = ['super_admin', 'hospital_admin'];
+// Canonical roles per Team Development Contract, Section 12
+const FULL_ACCESS_ROLES = ['SUPER_ADMIN', 'HOSPITAL_ADMIN', 'BRANCH_ADMIN'];
 
 const allMenuItems = [
   { path: '/dashboard', label: 'Dashboard', icon: FiHome, roles: null }, // null = everyone
+  { path: '/hospitals', label: 'Hospitals', icon: FiGrid, roles: ['SUPER_ADMIN'], strict: true },
+  { path: '/branches', label: 'Branches', icon: FiMapPin, roles: ['SUPER_ADMIN', 'HOSPITAL_ADMIN'], strict: true },
   {
-    label: 'Patient Management', icon: FiUsers, roles: ['receptionist', 'nurse'],
+    label: 'Patient Management', icon: FiUsers, roles: ['RECEPTIONIST', 'NURSE'],
     children: [
-      { path: '/patients', label: 'All Patients', roles: ['receptionist', 'nurse'] },
-      { path: '/patients/register', label: 'Register Patient', roles: ['receptionist'] },
+      { path: '/patients', label: 'All Patients', roles: ['RECEPTIONIST', 'NURSE'] },
+      { path: '/patients/register', label: 'Register Patient', roles: ['RECEPTIONIST'] },
     ]
   },
-  { path: '/appointments', label: 'Appointments', icon: FiCalendar, roles: ['doctor', 'receptionist', 'patient'] },
-  { path: '/doctors', label: 'Doctors', icon: FiHeart, roles: ['doctor', 'receptionist'] },
-  { path: '/emr', label: 'EMR / EHR', icon: FiFileText, roles: ['doctor', 'patient'] },
-  { path: '/telemedicine', label: 'Telemedicine', icon: FiMonitor, roles: ['doctor', 'patient'] },
-  { path: '/laboratory', label: 'Laboratory', icon: FiDroplet, roles: ['lab_technician', 'doctor'] },
-  { path: '/pharmacy', label: 'Pharmacy', icon: FiShoppingCart, roles: ['pharmacist'] },
-  { path: '/billing', label: 'Billing & Finance', icon: FiDollarSign, roles: ['accountant'] },
-  { path: '/ipd', label: 'IPD Management', icon: FiLayers, roles: ['nurse'] },
-  { path: '/emergency', label: 'Emergency', icon: FiAlertTriangle, roles: ['nurse'] },
+  { path: '/appointments', label: 'Appointments', icon: FiCalendar, roles: ['DOCTOR', 'RECEPTIONIST', 'PATIENT'] },
+  { path: '/doctors', label: 'Doctors', icon: FiHeart, roles: ['DOCTOR', 'RECEPTIONIST'] },
+  { path: '/emr', label: 'EMR / EHR', icon: FiFileText, roles: ['DOCTOR', 'PATIENT'] },
+  { path: '/telemedicine', label: 'Telemedicine', icon: FiMonitor, roles: ['DOCTOR', 'PATIENT'] },
+  { path: '/laboratory', label: 'Laboratory', icon: FiDroplet, roles: ['LAB_TECHNICIAN', 'DOCTOR'] },
+  { path: '/pharmacy', label: 'Pharmacy', icon: FiShoppingCart, roles: ['PHARMACIST'] },
+  { path: '/billing', label: 'Billing & Finance', icon: FiDollarSign, roles: ['ACCOUNTANT'] },
+  { path: '/ipd', label: 'IPD Management', icon: FiLayers, roles: ['NURSE'] },
+  { path: '/emergency', label: 'Emergency', icon: FiAlertTriangle, roles: ['NURSE'] },
   { path: '/hr', label: 'HR & Staff', icon: FiBriefcase, roles: [] }, // full-access only
-  { path: '/inventory', label: 'Inventory', icon: FiPackage, roles: ['pharmacist'] },
+  { path: '/inventory', label: 'Inventory', icon: FiPackage, roles: ['PHARMACIST'] },
   { path: '/ai', label: 'AI Features', icon: FiCpu, roles: [] }, // full-access only
-  { path: '/analytics', label: 'Analytics', icon: FiActivity, roles: ['accountant'] },
+  { path: '/analytics', label: 'Analytics', icon: FiActivity, roles: ['ACCOUNTANT'] },
 ];
 
 export default function Sidebar() {
@@ -44,12 +47,15 @@ export default function Sidebar() {
   const [expandedMenus, setExpandedMenus] = useState([]);
 
   const isFullAccess = FULL_ACCESS_ROLES.includes(role);
-  const canSee = (itemRoles) => isFullAccess || itemRoles === null || itemRoles.includes(role);
+  const canSee = (itemRoles, strict) => {
+    if (strict) return itemRoles.includes(role); // ignore full-access bypass
+    return isFullAccess || itemRoles === null || itemRoles.includes(role);
+  };
 
   const menuItems = allMenuItems
-    .filter(item => canSee(item.roles))
+    .filter(item => canSee(item.roles, item.strict))
     .map(item => item.children
-      ? { ...item, children: item.children.filter(c => canSee(c.roles)) }
+      ? { ...item, children: item.children.filter(c => canSee(c.roles, c.strict)) }
       : item
     );
 

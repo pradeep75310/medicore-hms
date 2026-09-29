@@ -18,7 +18,7 @@ export default function Login() {
     setTimeout(() => {
       dispatch(login({
         user: { name: 'Admin User', email: formData.email, role: 'Super Admin' },
-        role: 'super_admin',
+        role: 'SUPER_ADMIN',
         token: 'demo-token'
       }));
       navigate('/dashboard');
@@ -26,33 +26,35 @@ export default function Login() {
     }, 1000);
   };
 
-  // Roles exactly as listed in the MediCore Enterprise HMS PDF, section 3 (User Roles)
+  // Roles per the Team Development Contract (Section 12) — canonical, uppercase, frozen list of 10
   const demoLogin = (role) => {
     const roles = {
-      super_admin: { name: 'Super Admin', email: 'superadmin@medicore.com', role: 'Super Admin' },
-      hospital_admin: { name: 'Dr. Hospital Admin', email: 'admin@medicore.com', role: 'Hospital Admin' },
-      doctor: { name: 'Dr. Meera Joshi', email: 'doctor@medicore.com', role: 'Doctor' },
-      receptionist: { name: 'Priya Desai', email: 'reception@medicore.com', role: 'Receptionist' },
-      nurse: { name: 'Sunita Rane', email: 'nurse@medicore.com', role: 'Nurse' },
-      lab_technician: { name: 'Rahul Bhosale', email: 'lab@medicore.com', role: 'Lab Technician' },
-      pharmacist: { name: 'Anjali Kadam', email: 'pharmacy@medicore.com', role: 'Pharmacist' },
-      accountant: { name: 'Vivek Shinde', email: 'accounts@medicore.com', role: 'Accountant' },
-      patient: { name: 'Rajesh Kumar', email: 'patient@medicore.com', role: 'Patient' },
+      SUPER_ADMIN: { name: 'Super Admin', email: 'superadmin@medicore.com', role: 'Super Admin' },
+      HOSPITAL_ADMIN: { name: 'Dr. Hospital Admin', email: 'admin@medicore.com', role: 'Hospital Admin' },
+      BRANCH_ADMIN: { name: 'Kavita Joshi', email: 'branchadmin@medicore.com', role: 'Branch Admin' },
+      DOCTOR: { name: 'Dr. Meera Joshi', email: 'doctor@medicore.com', role: 'Doctor' },
+      RECEPTIONIST: { name: 'Priya Desai', email: 'reception@medicore.com', role: 'Receptionist' },
+      NURSE: { name: 'Sunita Rane', email: 'nurse@medicore.com', role: 'Nurse' },
+      LAB_TECHNICIAN: { name: 'Rahul Bhosale', email: 'lab@medicore.com', role: 'Lab Technician' },
+      PHARMACIST: { name: 'Anjali Kadam', email: 'pharmacy@medicore.com', role: 'Pharmacist' },
+      ACCOUNTANT: { name: 'Vivek Shinde', email: 'accounts@medicore.com', role: 'Accountant' },
+      PATIENT: { name: 'Rajesh Kumar', email: 'patient@medicore.com', role: 'Patient' },
     };
     dispatch(login({ user: roles[role], role, token: 'demo-token' }));
     navigate('/dashboard');
   };
 
   const demoButtons = [
-    { role: 'super_admin', label: 'Super Admin', color: 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200' },
-    { role: 'hospital_admin', label: 'Hospital Admin', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200' },
-    { role: 'doctor', label: 'Doctor', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200' },
-    { role: 'receptionist', label: 'Receptionist', color: 'bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200' },
-    { role: 'nurse', label: 'Nurse', color: 'bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200' },
-    { role: 'lab_technician', label: 'Lab Technician', color: 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border-cyan-200' },
-    { role: 'pharmacist', label: 'Pharmacist', color: 'bg-pink-50 text-pink-700 hover:bg-pink-100 border-pink-200' },
-    { role: 'accountant', label: 'Accountant', color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200' },
-    { role: 'patient', label: 'Patient', color: 'bg-green-50 text-green-700 hover:bg-green-100 border-green-200' },
+    { role: 'SUPER_ADMIN', label: 'Super Admin', color: 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200' },
+    { role: 'HOSPITAL_ADMIN', label: 'Hospital Admin', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200' },
+    { role: 'BRANCH_ADMIN', label: 'Branch Admin', color: 'bg-fuchsia-50 text-fuchsia-700 hover:bg-fuchsia-100 border-fuchsia-200' },
+    { role: 'DOCTOR', label: 'Doctor', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200' },
+    { role: 'RECEPTIONIST', label: 'Receptionist', color: 'bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200' },
+    { role: 'NURSE', label: 'Nurse', color: 'bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200' },
+    { role: 'LAB_TECHNICIAN', label: 'Lab Technician', color: 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border-cyan-200' },
+    { role: 'PHARMACIST', label: 'Pharmacist', color: 'bg-pink-50 text-pink-700 hover:bg-pink-100 border-pink-200' },
+    { role: 'ACCOUNTANT', label: 'Accountant', color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200' },
+    { role: 'PATIENT', label: 'Patient', color: 'bg-green-50 text-green-700 hover:bg-green-100 border-green-200' },
   ];
 
   return (
@@ -194,7 +196,7 @@ export default function Login() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-white text-gray-400">Quick Demo Login — all 9 roles</span>
+                  <span className="px-3 bg-white text-gray-400">Quick Demo Login — all 10 roles</span>
                 </div>
               </div>
 
