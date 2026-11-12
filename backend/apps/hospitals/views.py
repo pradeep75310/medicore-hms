@@ -1,36 +1,46 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated , AllowAny
 from .models import Hospital
 from .serializers import HospitalSerializer
 from .permissions import IsSuperUserOrHospitalAdmin
 
 
 class HospitalListCreateView(APIView):
+    
+    def get_permissions(self):
 
-    permission_classes = [
-        IsAuthenticated,
-        IsSuperUserOrHospitalAdmin
-    ]
+        if self.request.method == "GET":
+            return [AllowAny()]
+
+        return [
+            IsAuthenticated(),
+            IsSuperUserOrHospitalAdmin()
+        ]
 
     # =========================
     # GET - Hospital List
     # =========================
 
     def get(self, request):
+        if not request.user.is_authenticated:
 
-        user = request.user
+            hospitals = Hospital.objects.select_related(
+                "created_by"
+            ).filter(
+                status="ACTIVE"
+            )
 
-        if user.role == "SUPER_USER":
+        elif request.user.role == "SUPER_USER":
 
             hospitals = Hospital.objects.select_related(
                 "created_by"
             ).all()
 
-        elif user.role == "HOSPITAL_ADMIN":
+        elif request.user.role == "HOSPITAL_ADMIN":
 
-            if not user.hospital_id:
+            if not request.user.hospital_id:
                 return Response(
                     {
                         "success": False,
@@ -42,7 +52,7 @@ class HospitalListCreateView(APIView):
             hospitals = Hospital.objects.select_related(
                 "created_by"
             ).filter(
-                id=user.hospital_id
+                id=request.user.hospital_id
             )
 
         else:
@@ -136,8 +146,6 @@ class HospitalDetailView(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-
-        # Hospital Admin can only see own hospital
         if (
             request.user.role == "HOSPITAL_ADMIN"
             and request.user.hospital_id != hospital.id

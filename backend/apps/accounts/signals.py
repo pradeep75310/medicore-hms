@@ -13,7 +13,7 @@ def create_role_profile(
     if not created:
         return
     if instance.role == "DOCTOR":
-        from doctors.models import DoctorProfile
+        from apps.doctors.models import DoctorProfile
         DoctorProfile.objects.create(
             user=instance
         )

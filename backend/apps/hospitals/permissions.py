@@ -5,16 +5,30 @@ class IsSuperUserOrHospitalAdmin(BasePermission):
 
     def has_permission(self, request, view):
 
-        if not request.user.is_authenticated:
+        user = request.user
+
+        if not user.is_authenticated:
             return False
 
-        if request.user.role == "SUPER_USER":
-            return True
+        # =============================================
+        # SUPER USER
+        # =============================================
 
         if (
-            request.user.role == "HOSPITAL_ADMIN"
-            and request.user.is_active
-            and request.user.is_approved
+            user.role == "SUPER_USER"
+            and user.is_active
+        ):
+            return True
+
+        # =============================================
+        # HOSPITAL ADMIN
+        # =============================================
+
+        if (
+            user.role == "HOSPITAL_ADMIN"
+            and user.is_active
+            and user.is_approved
+            and user.hospital_id is not None
         ):
             return True
 

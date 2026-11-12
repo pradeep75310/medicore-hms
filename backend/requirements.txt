@@ -14,3 +14,5 @@ pip install django-filter
 pip install drf-spectacular
 pip install Pillow
  pip install python-decouple
+ npm install lucide-react
+ npm ls jspdf jspdf-autotable xlsx

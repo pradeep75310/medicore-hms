@@ -1,122 +1,180 @@
 from rest_framework.permissions import BasePermission
 
+
+# =========================================================
+# SUPER USER
+# =========================================================
+
 class IsSuperUser(BasePermission):
-    
-    def has_permission (self , request , view):
-         return (
-            request.user.is_authenticated
-            and request.user.is_superuser
-            and request.user.role == "SUPER_USER"
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        return (
+            user.is_authenticated
+            and user.is_active
+            and user.is_superuser
+            and user.role == "SUPER_USER"
         )
-         
+
+
+# =========================================================
+# HOSPITAL ADMIN
+# =========================================================
+
 class IsHospitalAdmin(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "HOSPITAL_ADMIN"
-            and request.user.is_approved
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "HOSPITAL_ADMIN"
+            and user.is_approved
+            and user.hospital_id is not None
         )
+
+
+# =========================================================
+# SUPER USER OR HOSPITAL ADMIN
+# =========================================================
 
 class IsSuperUserOrHospitalAdmin(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
 
-        if not request.user.is_authenticated:
+        if not user.is_authenticated or not user.is_active:
             return False
 
+        # Super User
+        if (
+            user.is_superuser
+            and user.role == "SUPER_USER"
+        ):
+            return True
+
+        # Hospital Admin
         return (
-            request.user.is_superuser
-            or (
-                request.user.role == "HOSPITAL_ADMIN"
-                and request.user.is_approved
-                and request.user.is_active
-            )
+            user.role == "HOSPITAL_ADMIN"
+            and user.is_approved
+            and user.hospital_id is not None
         )
 
+
+
+class IsHospitalAdminOrSuperUser(IsSuperUserOrHospitalAdmin):
+    pass
+
+
+# =========================================================
+# PATIENT
+# =========================================================
 
 class IsPatient(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "PATIENT"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "PATIENT"
         )
-        
+
+
+# =========================================================
+# DOCTOR
+# =========================================================
+
 class IsDoctor(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "DOCTOR"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "DOCTOR"
         )
 
+
+# =========================================================
+# NURSE
+# =========================================================
 
 class IsNurse(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "NURSE"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "NURSE"
         )
 
+
+# =========================================================
+# RECEPTIONIST
+# =========================================================
 
 class IsReceptionist(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "RECEPTIONIST"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "RECEPTIONIST"
         )
-        
-        
+
+
+# =========================================================
+# PHARMACIST
+# =========================================================
+
 class IsPharmacist(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "PHARMACIST"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "PHARMACIST"
         )
 
+
+# =========================================================
+# ACCOUNTANT
+# =========================================================
 
 class IsAccountant(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "ACCOUNTANT"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "ACCOUNTANT"
         )
 
+
+# =========================================================
+# LAB TECHNICIAN
+# =========================================================
 
 class IsLabTechnician(BasePermission):
 
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user.is_authenticated
-            and request.user.role == "LAB_TECHNICIAN"
-            and request.user.is_active
+            user.is_authenticated
+            and user.is_active
+            and user.role == "LAB_TECHNICIAN"
         )
-        
-        
-class IsHospitalAdminOrSuperUser(BasePermission):
-
-    def has_permission(self, request, view):
-
-        if not request.user.is_authenticated:
-            return False
-
-        if request.user.is_superuser:
-            return True
-
-        return (
-            request.user.role == "HOSPITAL_ADMIN"
-            and request.user.is_active
-            and request.user.is_approved
-        )                                 
